@@ -34,7 +34,15 @@ Dans le modèle is_draw, les coefficients élevés traduisent des configurations
 La case centrale est particulièrement influente, car elle intervient dans le plus grand nombre de combinaisons gagnantes possibles.
 
 Ces résultats sont cohérents avec la stratégie humaine : les joueurs expérimentés privilégient le centre, puis les coins, car ces positions offrent plus d’opportunités de créer des alignements ou des doubles menaces, contrairement aux bords qui sont moins stratégiques.
-## Q2
-## Q3
-## Q4
+### Q2
+
+Le modèle `x_wins` est plus facile à apprendre que `is_draw` en raison du déséquilibre des classes : `x_wins` a 75.53% de classe 1 vs 24.47% de 0, tandis que `is_draw` a 81.8% de 0 vs 18.2% de 1. Cela entraîne un biais où `is_draw` ne prédit jamais la classe minoritaire (match nul), donnant une précision élevée (82.7%) mais un f1-score faible (74.8%) et une matrice de confusion montrant 0 prédictions correctes pour les nuls. En revanche, `x_wins` a un f1-score de 73.4% avec une meilleure répartition des erreurs. Pour améliorer `is_draw`, on pourrait utiliser du sur-échantillonnage (SMOTE) ou des poids de classe.
+
+### Q3
+Les métriques d'évaluation montrent que les modèles sont performants sur l'ensemble test (20% des données) :
+- `x_wins` : Accuracy 78.8%, F1 73.4%, Precision 76.5%, Recall 78.8%. Matrice : [[18 94] [9 364]] – bon rappel pour la classe majoritaire, faible pour la minoritaire.
+- `is_draw` : Accuracy 82.7%, F1 74.8%, Precision 68.4%, Recall 82.7%. Matrice : [[401 0] [84 0]] – prédit toujours "pas nul", ignorant les nuls.
+Ces résultats indiquent un surapprentissage possible sur la classe majoritaire, avec besoin d'équilibrage pour de meilleures performances globales
+### Q4
+L'IA intégrée dans `morpion-game.py` utilise les modèles pour jouer en O : à chaque tour, elle simule tous les coups possibles, encode l'état, prédit `x_wins` et `is_draw`, et choisit le coup minimisant `x_wins` + maximisant `is_draw` (score = -prob_xwins + prob_draw). Cela permet une stratégie défensive/intelligente. L'interface Tkinter affiche le plateau, la matrice encodée, et permet de jouer contre l'IA en temps réel. L'IA réagit en ~0.5s par coup, offrant une expérience fluide.
 ## Liens vers la vidéo
