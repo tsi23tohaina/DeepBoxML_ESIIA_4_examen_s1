@@ -93,7 +93,7 @@ class TicTacToeGenerator:
 
         cols = [f'c{i}_{p}' for i in range(9) for p in ['x', 'o']] + ['x_wins', 'is_draw']
         df = pd.DataFrame(rows, columns=cols)
-        df.to_csv('ressources/dataset1.csv', index=False)
+        df.to_csv('ressources/dataset.csv', index=False)
         print(f"Dataset généré : {len(df)} lignes uniques enregistrées.")
 
 if __name__ == "__main__":

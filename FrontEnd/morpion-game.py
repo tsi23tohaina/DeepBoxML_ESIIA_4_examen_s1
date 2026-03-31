@@ -1,6 +1,8 @@
 import tkinter as tk
 import csv
 import os
+import joblib
+import numpy as np
 
 # ─────────────────────────────────────────────
 # ENCODAGE
@@ -73,13 +75,20 @@ O_CLAIR     = "#FFCCBC"   # fond cellule matrice O
 GRIS_TXT    = "#999999"
 
 # ─────────────────────────────────────────────
+# CHARGEMENT DES MODÈLES ML
+# ─────────────────────────────────────────────
+
+model_xwins = joblib.load('models/model_xwins.pkl')
+model_draw = joblib.load('models/model_is_draw.pkl')
+
+# ─────────────────────────────────────────────
 # JEU TKINTER
 # ─────────────────────────────────────────────
 
 class Morpion:
     def __init__(self, root, fichier_csv="dataset_morpion.csv"):
         self.root = root
-        self.root.title("Morpion — Encodage ML")
+        self.root.title("Morpion — IA ML")
         self.root.resizable(False, False)
         self.fichier_csv = fichier_csv
         self.historique = []
@@ -87,7 +96,31 @@ class Morpion:
         self.plateau = [None] * 9
         self.boutons = []
         self.enc_labels = []
+        self.ai_player = "O"  # IA joue en O
         self._creer_interface()
+
+    def _get_ai_move(self):
+        best_score = -float('inf')
+        best_move = None
+        for i in range(9):
+            if self.plateau[i] is None:
+                # Simuler le coup
+                self.plateau[i] = self.ai_player
+                encoded = encoder_ligne(self.plateau)
+                pred_xwins = model_xwins.predict_proba([encoded])[0][1]  # prob X wins
+                pred_draw = model_draw.predict_proba([encoded])[0][1]   # prob draw
+                # Score: pour O, minimiser xwins, maximiser draw
+                score = -pred_xwins + pred_draw
+                if score > best_score:
+                    best_score = score
+                    best_move = i
+                self.plateau[i] = None  # annuler simulation
+        return best_move
+
+    def _jouer_ai(self):
+        move = self._get_ai_move()
+        if move is not None:
+            self.jouer(move)
 
     def _creer_interface(self):
 
@@ -226,6 +259,8 @@ class Morpion:
             self.joueur_actuel = "O" if self.joueur_actuel == "X" else "X"
             self.label_statut.config(
                 text=f"Tour du joueur : {self.joueur_actuel}")
+            if self.joueur_actuel == self.ai_player:
+                self.root.after(500, self._jouer_ai)  # Délai pour simuler réflexion
 
     def _combo_gagnant(self):
         for combo in COMBOS_GAGNANTS:
@@ -273,7 +308,6 @@ class Morpion:
 # ─────────────────────────────────────────────
 
 if __name__ == "__main__":
-    generer_parties("dataset_morpion.csv")
     root = tk.Tk()
     Morpion(root, fichier_csv="dataset_morpion.csv")
     root.mainloop()
