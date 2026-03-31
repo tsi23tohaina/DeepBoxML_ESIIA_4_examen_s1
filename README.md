@@ -22,7 +22,18 @@ Enfin, le projet inclut le développement d’une interface jouable, offrant une
 
 ## Résultats ML
 ## Réponses aux questions
-## Q1 
+
+## Q1 — Analyse des coefficients
+
+Pour les deux modèles (x_wins et is_draw), les coefficients les plus élevés en valeur absolue correspondent principalement à la case centrale, suivie des cases situées dans les coins. Les cases sur les bords ont généralement une influence plus faible.
+
+Dans le modèle x_wins, une occupation du centre ou des coins par X possède des coefficients positifs élevés, ce qui augmente fortement la probabilité de victoire de X. À l’inverse, ces mêmes positions occupées par O ont des coefficients négatifs importants, réduisant les chances de victoire de X.
+
+Dans le modèle is_draw, les coefficients élevés traduisent des configurations plus équilibrées entre X et O, où aucune position dominante ne se dégage clairement, ce qui favorise un match nul.
+
+La case centrale est particulièrement influente, car elle intervient dans le plus grand nombre de combinaisons gagnantes possibles.
+
+Ces résultats sont cohérents avec la stratégie humaine : les joueurs expérimentés privilégient le centre, puis les coins, car ces positions offrent plus d’opportunités de créer des alignements ou des doubles menaces, contrairement aux bords qui sont moins stratégiques.
 ## Q2
 ## Q3
 ## Q4
