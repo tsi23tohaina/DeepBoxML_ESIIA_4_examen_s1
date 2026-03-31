@@ -46,10 +46,96 @@ Contient les ressources liées aux données :
 ###  requirements.txt
 Liste des bibliothèques nécessaires à l’exécution du projet.
 
+##  Librairies utilisées
+
+Le projet s’appuie sur plusieurs librairies Python essentielles pour le traitement des données, le Machine Learning et la visualisation :
+
+###  pandas
+Bibliothèque utilisée pour la **manipulation et l’analyse des données**.  
+Elle permet de :
+- Charger et structurer les datasets (DataFrame)
+- Nettoyer et transformer les données
+- Filtrer, trier et analyser facilement les informations  
+Dans ce projet, pandas est utilisé pour préparer les données du jeu de morpion avant leur exploitation par les modèles ML.
+
+---
+
+###  scikit-learn
+Bibliothèque de référence pour le **Machine Learning en Python**.  
+Elle fournit :
+- Des algorithmes de classification et de régression
+- Des outils d’entraînement et d’évaluation (accuracy, split train/test, etc.)
+- Des fonctions de prétraitement des données  
+Dans ce projet, elle est utilisée pour entraîner les modèles capables de prédire les résultats des parties (victoire ou match nul).
+
+---
+
+###  joblib
+Bibliothèque utilisée pour **sauvegarder et charger les modèles entraînés**.  
+Elle permet de :
+- Enregistrer un modèle ML sur disque
+- Le recharger rapidement sans réentraîner  
+Dans ce projet, joblib est utilisé pour conserver les modèles après entraînement et les réutiliser dans l’application.
+
+---
+
+###  matplotlib
+Bibliothèque de base pour la **visualisation de données**.  
+Elle permet de créer :
+- Graphiques (courbes, histogrammes, etc.)
+- Représentations visuelles simples et personnalisables  
+Dans ce projet, matplotlib est utilisé pour visualiser les performances et les tendances des données.
+
+---
+
+###  seaborn
+Bibliothèque de visualisation basée sur matplotlib, mais plus **avancée et esthétique**.  
+Elle permet de :
+- Créer des graphiques plus lisibles et modernes
+- Visualiser des matrices (ex : matrice de confusion)
+- Explorer les relations entre variables  
+Dans ce projet, seaborn est utilisé pour améliorer la lisibilité des analyses visuelles et faciliter l’interprétation des résultats.
+
 ###  README.md
 Document principal décrivant le projet, son fonctionnement et son utilisation.
 
 ## Résultats ML
+
+Les modèles de Machine Learning développés dans ce projet ont pour objectif de prédire l’issue d’une partie de morpion à partir d’un état donné du plateau. Deux modèles principaux ont été étudiés :  
+- **x_wins** : prédiction de la victoire de X  
+- **is_draw** : prédiction d’un match nul  
+
+###  Performance des modèles
+
+Les résultats obtenus montrent que les modèles sont capables de capturer efficacement les règles implicites du jeu :
+
+- Bonne précision globale sur les données de test  
+- Capacité à distinguer les positions gagnantes, perdantes et neutres  
+- Généralisation correcte sur des configurations non vues pendant l’entraînement  
+
+###  Interprétation des résultats
+
+L’analyse des coefficients met en évidence que :
+
+- **La case centrale** est la plus influente dans les prédictions  
+- **Les coins** jouent également un rôle stratégique important  
+- Les **bords** ont un impact plus faible  
+
+Le modèle attribue des poids positifs élevés lorsque **X occupe des positions clés** (centre, coins), et des poids négatifs lorsque ces positions sont occupées par **O**.
+
+###  Comportement du modèle
+
+- Le modèle **x_wins** favorise les configurations où X contrôle les positions stratégiques  
+- Le modèle **is_draw** identifie les situations équilibrées où aucun joueur ne prend l’avantage  
+
+###  Conclusion
+
+Les résultats montrent que le modèle apprend une stratégie cohérente avec le jeu humain :  
+- Priorité au centre  
+- Contrôle des coins  
+- Anticipation des alignements  
+
+Cela confirme que l’approche Machine Learning permet de modéliser efficacement la logique du morpion et de produire une IA capable de prendre des décisions pertinentes.
 ## Réponses aux questions
 
 ### Q1 — Analyse des coefficients
