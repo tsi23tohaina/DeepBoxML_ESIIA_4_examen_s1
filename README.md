@@ -46,6 +46,56 @@ Contient les ressources liées aux données :
 ###  requirements.txt
 Liste des bibliothèques nécessaires à l’exécution du projet.
 
+##  Librairies utilisées
+
+Le projet s’appuie sur plusieurs librairies Python essentielles pour le traitement des données, le Machine Learning et la visualisation :
+
+###  pandas
+Bibliothèque utilisée pour la **manipulation et l’analyse des données**.  
+Elle permet de :
+- Charger et structurer les datasets (DataFrame)
+- Nettoyer et transformer les données
+- Filtrer, trier et analyser facilement les informations  
+Dans ce projet, pandas est utilisé pour préparer les données du jeu de morpion avant leur exploitation par les modèles ML.
+
+---
+
+###  scikit-learn
+Bibliothèque de référence pour le **Machine Learning en Python**.  
+Elle fournit :
+- Des algorithmes de classification et de régression
+- Des outils d’entraînement et d’évaluation (accuracy, split train/test, etc.)
+- Des fonctions de prétraitement des données  
+Dans ce projet, elle est utilisée pour entraîner les modèles capables de prédire les résultats des parties (victoire ou match nul).
+
+---
+
+###  joblib
+Bibliothèque utilisée pour **sauvegarder et charger les modèles entraînés**.  
+Elle permet de :
+- Enregistrer un modèle ML sur disque
+- Le recharger rapidement sans réentraîner  
+Dans ce projet, joblib est utilisé pour conserver les modèles après entraînement et les réutiliser dans l’application.
+
+---
+
+###  matplotlib
+Bibliothèque de base pour la **visualisation de données**.  
+Elle permet de créer :
+- Graphiques (courbes, histogrammes, etc.)
+- Représentations visuelles simples et personnalisables  
+Dans ce projet, matplotlib est utilisé pour visualiser les performances et les tendances des données.
+
+---
+
+###  seaborn
+Bibliothèque de visualisation basée sur matplotlib, mais plus **avancée et esthétique**.  
+Elle permet de :
+- Créer des graphiques plus lisibles et modernes
+- Visualiser des matrices (ex : matrice de confusion)
+- Explorer les relations entre variables  
+Dans ce projet, seaborn est utilisé pour améliorer la lisibilité des analyses visuelles et faciliter l’interprétation des résultats.
+
 ###  README.md
 Document principal décrivant le projet, son fonctionnement et son utilisation.
 

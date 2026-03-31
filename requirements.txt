@@ -1,5 +1,5 @@
-pandas
-scikit-learn
-joblib
-matplotlib
-seaborn
+pandas : analyse des données
+scikit-learn : librairie de tout le ML
+joblib : enregistrement des données du ML
+matplotlib : visualisation
+seaborn : visualisation
