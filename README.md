@@ -1,7 +1,7 @@
-Examen ML en group (DeepBoxTeam)<br>
+## Examen ML en group (DeepBoxTeam)
 (https://ispm-edu.com/)<br>
-Nom du groupe : DeepBox Team<br>
-Membre du groupe <br>
+## Nom du groupe : DeepBox Team
+## Membre du groupe
 Nom et prénom	Classe	Numéro<br>
 RANAIVONOHATRA Mahentsoa Akel	ESIIA4	02<br>
 RAJOELISOLO Sitraka Tsitohaina	ESIIA4	05<br>
