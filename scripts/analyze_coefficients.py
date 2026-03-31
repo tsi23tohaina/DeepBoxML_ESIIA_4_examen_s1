@@ -22,6 +22,28 @@ for target in ['x_wins', 'is_draw']:
 print("\nCroisement x_wins / is_draw:")
 print(pd.crosstab(data['x_wins'], data['is_draw']))
 
+# Graphique EDA additionnel : distribution des cibles
+plt.figure(figsize=(10, 5))
+plt.subplot(1, 2, 1)
+sns.countplot(x='x_wins', data=data, palette='Blues')
+plt.title('Distribution x_wins')
+plt.xlabel('x_wins')
+plt.ylabel('Count')
+
+plt.subplot(1, 2, 2)
+sns.countplot(x='is_draw', data=data, palette='Oranges')
+plt.title('Distribution is_draw')
+plt.xlabel('is_draw')
+plt.ylabel('Count')
+
+plt.tight_layout()
+plt.savefig('results/eda_target_distribution.png')
+print("Graphique de distribution des cibles sauvegardé dans eda_target_distribution.png")
+try:
+    plt.show(block=False)
+except Exception:
+    pass
+
 # Quelle case est le plus occupée par X dans les positions gagnantes de X ?
 x_win_states = data[data['x_wins'] == 1]
 occupancy_x = []
@@ -41,6 +63,10 @@ plt.title('Heatmap de corrélation (dataset Morpion)')
 plt.tight_layout()
 plt.savefig('results/eda_correlation_heatmap.png')
 print("Heatmap sauvegardée dans eda_correlation_heatmap.png")
+try:
+    plt.show(block=False)
+except Exception:
+    pass
 
 # Étape 2: Baseline régression logistique (déjà entraîné)
 print("\n--- Etape 2: Baseline Régression Logistique ---")

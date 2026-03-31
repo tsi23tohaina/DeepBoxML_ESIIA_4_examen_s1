@@ -74,6 +74,11 @@ X_CLAIR     = "#E0E0E0"   # fond cellule matrice X
 O_CLAIR     = "#FFCCBC"   # fond cellule matrice O
 GRIS_TXT    = "#999999"
 
+# Modes de jeu possibles
+MODE_VS_HUMAN   = "vs_human"
+MODE_VS_AI_ML   = "vs_ai_ml"
+MODE_VS_AI_HYBRID = "vs_ai_hybrid"
+
 # ─────────────────────────────────────────────
 # CHARGEMENT DES MODÈLES ML
 # ─────────────────────────────────────────────
@@ -96,44 +101,125 @@ class Morpion:
         self.plateau = [None] * 9
         self.boutons = []
         self.enc_labels = []
-        self.ai_player = "O"  # IA joue en O
+        self.mode = MODE_VS_AI_ML  # valeur initiale : IA (ML)
+        self.ai_player = "O"  # IA joue en O quand activée
+        self.mode_var = tk.StringVar(value=self.mode)
         self._creer_interface()
 
+    def _changer_mode(self):
+        self.mode = self.mode_var.get()
+        if self.mode == MODE_VS_HUMAN:
+            self.ai_player = None
+        else:
+            self.ai_player = "O"
+        self.reinitialiser()
+
+    def _eval_heuristique_ml(self, plateau):
+        if verifier_victoire(plateau, "X"): return -1.0
+        if verifier_victoire(plateau, "O"): return 1.0
+        if all(v is not None for v in plateau): return 0.0
+        encoded = encoder_ligne(plateau)
+        pred_xwins = model_xwins.predict_proba([encoded])[0][1]
+        pred_draw = model_draw.predict_proba([encoded])[0][1]
+        return -pred_xwins + pred_draw
+
+    def _minimax_hybride(self, plateau, depth, joueur, alpha=-float('inf'), beta=float('inf')):
+        if verifier_victoire(plateau, "X") or verifier_victoire(plateau, "O") or all(v is not None for v in plateau):
+            return self._eval_heuristique_ml(plateau)
+        if depth == 0:
+            return self._eval_heuristique_ml(plateau)
+
+        if joueur == "O":
+            best = -float('inf')
+            for i in range(9):
+                if plateau[i] is None:
+                    plateau[i] = "O"
+                    score = self._minimax_hybride(plateau, depth - 1, "X", alpha, beta)
+                    plateau[i] = None
+                    best = max(best, score)
+                    alpha = max(alpha, best)
+                    if beta <= alpha:
+                        break
+            return best
+        else:
+            best = float('inf')
+            for i in range(9):
+                if plateau[i] is None:
+                    plateau[i] = "X"
+                    score = self._minimax_hybride(plateau, depth - 1, "O", alpha, beta)
+                    plateau[i] = None
+                    best = min(best, score)
+                    beta = min(beta, best)
+                    if beta <= alpha:
+                        break
+            return best
+
     def _get_ai_move(self):
+        if self.mode == MODE_VS_AI_HYBRID:
+            best_score = -float('inf')
+            best_move = None
+            for i in range(9):
+                if self.plateau[i] is None:
+                    self.plateau[i] = self.ai_player
+                    score = self._minimax_hybride(self.plateau, depth=3, joueur="X")
+                    self.plateau[i] = None
+                    if score > best_score:
+                        best_score = score
+                        best_move = i
+            return best_move
+
         best_score = -float('inf')
         best_move = None
         for i in range(9):
             if self.plateau[i] is None:
-                # Simuler le coup
                 self.plateau[i] = self.ai_player
                 encoded = encoder_ligne(self.plateau)
                 pred_xwins = model_xwins.predict_proba([encoded])[0][1]  # prob X wins
                 pred_draw = model_draw.predict_proba([encoded])[0][1]   # prob draw
-                # Score: pour O, minimiser xwins, maximiser draw
                 score = -pred_xwins + pred_draw
                 if score > best_score:
                     best_score = score
                     best_move = i
-                self.plateau[i] = None  # annuler simulation
+                self.plateau[i] = None
         return best_move
 
     def _jouer_ai(self):
+        if self.mode == MODE_VS_HUMAN:
+            return
         move = self._get_ai_move()
         if move is not None:
             self.jouer(move)
 
     def _creer_interface(self):
 
+        # ── Choix du mode de jeu ─────────────────────────────────
+        frame_mode = tk.Frame(self.root)
+        frame_mode.pack(pady=(8, 0))
+
+        tk.Label(frame_mode, text="Mode de jeu :", font=("Helvetica", 10, "bold")).pack(side="left", padx=(0, 8))
+        tk.Radiobutton(
+            frame_mode, text="Humain vs Humain", variable=self.mode_var,
+            value=MODE_VS_HUMAN, command=self._changer_mode
+        ).pack(side="left")
+        tk.Radiobutton(
+            frame_mode, text="IA (ML)", variable=self.mode_var,
+            value=MODE_VS_AI_ML, command=self._changer_mode
+        ).pack(side="left", padx=(8, 0))
+        tk.Radiobutton(
+            frame_mode, text="IA (Hybride)", variable=self.mode_var,
+            value=MODE_VS_AI_HYBRID, command=self._changer_mode
+        ).pack(side="left", padx=(8, 0))
+
         # ── Statut ──────────────────────────────────────────────
         self.label_statut = tk.Label(
             self.root, text="Tour du joueur : X",
-            font=("Helvetica", 13), pady=8
+            font=("Helvetica", 18, "bold"), pady=12
         )
         self.label_statut.pack()
 
         # ── Zone centrale : plateau | → | matrice ───────────────
         frame_main = tk.Frame(self.root)
-        frame_main.pack(padx=20, pady=5)
+        frame_main.pack(padx=40, pady=10)
 
         # -- Plateau --
         frame_plateau = tk.Frame(frame_main)
@@ -146,17 +232,17 @@ class Morpion:
         for i in range(9):
             btn = tk.Button(
                 frame_plateau, text="",
-                font=("Helvetica", 28, "bold"),
-                width=3, height=1, relief="groove",
+                font=("Helvetica", 23, "bold"),
+                width=7, height=4, relief="groove",
                 command=lambda i=i: self.jouer(i)
             )
-            btn.grid(row=(i // 3) + 1, column=i % 3, padx=3, pady=3)
+            btn.grid(row=(i // 3) + 1, column=i % 3, padx=8, pady=8)
             self.boutons.append(btn)
 
         # -- Flèche --
         tk.Label(frame_main, text="→",
-                 font=("Helvetica", 18), fg="gray").grid(
-            row=0, column=1, padx=12, pady=(40, 0), sticky="n")
+                 font=("Helvetica", 28), fg="gray").grid(
+            row=0, column=1, padx=30, pady=(80, 0), sticky="n")
 
         # -- Matrice --
         frame_matrice = tk.Frame(frame_main)
@@ -197,19 +283,19 @@ class Morpion:
 
         # ── Boutons bas ─────────────────────────────────────────
         frame_btn = tk.Frame(self.root)
-        frame_btn.pack(pady=10)
+        frame_btn.pack(pady=15)
 
         tk.Button(frame_btn, text="Rejouer",
-                  font=("Helvetica", 10),
-                  command=self.reinitialiser, padx=12).pack(side="left", padx=5)
+                  font=("Helvetica", 12, "bold"),
+                  command=self.reinitialiser, padx=15, pady=8).pack(side="left", padx=8)
 
         tk.Button(frame_btn, text="Sauvegarder → CSV",
-                  font=("Helvetica", 10),
-                  command=self.sauvegarder, padx=12).pack(side="left", padx=5)
+                  font=("Helvetica", 12, "bold"),
+                  command=self.sauvegarder, padx=15, pady=8).pack(side="left", padx=8)
 
         self.label_info = tk.Label(
-            self.root, text="", font=("Helvetica", 9), fg="green")
-        self.label_info.pack(pady=(0, 10))
+            self.root, text="", font=("Helvetica", 11), fg="green")
+        self.label_info.pack(pady=(0, 15))
 
     # ── Mise à jour de la matrice ────────────────────────────────
     def _mettre_a_jour_matrice(self):
@@ -259,6 +345,10 @@ class Morpion:
             self.joueur_actuel = "O" if self.joueur_actuel == "X" else "X"
             self.label_statut.config(
                 text=f"Tour du joueur : {self.joueur_actuel}")
+
+            if self.mode == MODE_VS_HUMAN:
+                return
+
             if self.joueur_actuel == self.ai_player:
                 self.root.after(500, self._jouer_ai)  # Délai pour simuler réflexion
 

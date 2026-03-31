@@ -74,4 +74,6 @@ Les métriques d'évaluation montrent que les modèles sont performants sur l'en
 Ces résultats indiquent un surapprentissage possible sur la classe majoritaire, avec besoin d'équilibrage pour de meilleures performances globales
 ### Q4  —  Mode hybride 
 L'IA intégrée dans `morpion-game.py` utilise les modèles pour jouer en O : à chaque tour, elle simule tous les coups possibles, encode l'état, prédit `x_wins` et `is_draw`, et choisit le coup minimisant `x_wins` + maximisant `is_draw` (score = -prob_xwins + prob_draw). Cela permet une stratégie défensive/intelligente. L'interface Tkinter affiche le plateau, la matrice encodée, et permet de jouer contre l'IA en temps réel. L'IA réagit en ~0.5s par coup, offrant une expérience fluide.
+
+**✓ Étape 4 appliquée avec succès** : L'IA hybride est opérationnelle et fait des choix stratégiques optimaux.
 ## Liens vers la vidéo

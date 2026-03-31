@@ -27,7 +27,8 @@ print(f"Accuracy: {accuracy_score(y_test_xwins, y_pred_xwins)}")
 print(classification_report(y_test_xwins, y_pred_xwins))
 
 # Modèle pour is_draw
-model_draw = LogisticRegression(max_iter=1000)
+model_draw = LogisticRegression(max_iter=10000
+)
 model_draw.fit(X_train, y_train_draw)
 
 y_pred_draw = model_draw.predict(X_test)
