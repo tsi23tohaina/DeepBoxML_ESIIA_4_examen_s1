@@ -1,6 +1,5 @@
 import pandas as pd
 import os
-import time
 
 class TicTacToeGenerator:
     def __init__(self, use_alpha_beta=True):
@@ -71,42 +70,27 @@ class TicTacToeGenerator:
                 self.generate_all_states(board, not turn_x)
                 board[i] = 0
 
-    def export_csv(self):
-        if not os.path.exists('ressources'):
-            os.makedirs('ressources')
-            
+    def export_csv(self, output_path=None):
+        if output_path is None:
+            base = os.path.dirname(os.path.abspath(__file__))
+            output_path = os.path.join(base, '..', 'ressources', 'dataset1.csv')
+
+        os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+
         rows = []
         for item in self.data:
             board = item['state']
             res = item['outcome']
-            # Encodage des 18 features (ci_x, ci_o)
             row = []
             for val in board:
-                if val == 1: row.extend([1, 0])
+                if val == 1:    row.extend([1, 0])
                 elif val == -1: row.extend([0, 1])
-                else: row.extend([0, 0])
-            
-            # Cibles x_wins et is_draw
+                else:           row.extend([0, 0])
             row.append(1 if res == 1 else 0)
             row.append(1 if res == 0 else 0)
             rows.append(row)
 
         cols = [f'c{i}_{p}' for i in range(9) for p in ['x', 'o']] + ['x_wins', 'is_draw']
         df = pd.DataFrame(rows, columns=cols)
-        df.to_csv('ressources/dataset1.csv', index=False)
-        print(f"Dataset généré : {len(df)} lignes uniques enregistrées.")
-
-if __name__ == "__main__":
-    # --- CHOIX DU GÉNÉRATEUR ---
-    # True  = Alpha-Bêta (Rapide, recommandé pour l'examen)
-    # False = Classique (Plus lent)
-    mode_alpha = True 
-    
-    start_time = time.time()
-    gen = TicTacToeGenerator(use_alpha_beta=mode_alpha)
-    
-    print(f"Lancement de la génération (Mode Alpha-Beta: {mode_alpha})...")
-    gen.generate_all_states([0]*9, True)
-    gen.export_csv()
-    
-    print(f"Terminé en {time.time() - start_time:.2f} secondes.")
+        df.to_csv(output_path, index=False)
+        print(f"Dataset généré : {len(df)} lignes uniques enregistrées → {output_path}")
