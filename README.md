@@ -25,6 +25,30 @@ Le projet est organisé en plusieurs dossiers, chacun ayant un rôle bien défin
 ├── resource/ # Données : dataset généré et analysé<br>
 ├── requirements.txt # Dépendances du projet<br>
 └── README.md # Documentation du projet<br>
+
+
+###  frontend
+Contient l’interface utilisateur permettant de jouer au morpion contre l’IA.  
+Elle gère l’affichage du plateau, les interactions joueur, et la communication avec le modèle.
+
+###  generateur
+Regroupe les algorithmes de décision utilisés par l’IA :
+- Minimax
+- Alpha-Beta pruning  
+Ces méthodes permettent d’évaluer les positions et de choisir les meilleurs coups.
+
+###  resource
+Contient les ressources liées aux données :
+- Dataset généré
+- Données utilisées pour l’entraînement et l’analyse
+- Résultats expérimentaux
+
+###  requirements.txt
+Liste des bibliothèques nécessaires à l’exécution du projet.
+
+###  README.md
+Document principal décrivant le projet, son fonctionnement et son utilisation.
+
 ## Résultats ML
 ## Réponses aux questions
 
