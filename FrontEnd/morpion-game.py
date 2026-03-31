@@ -78,8 +78,8 @@ GRIS_TXT    = "#999999"
 # CHARGEMENT DES MODÈLES ML
 # ─────────────────────────────────────────────
 
-model_xwins = joblib.load('models/model_xwins.pkl')
-model_draw = joblib.load('models/model_is_draw.pkl')
+model_xwins = joblib.load('models/x_wins_mlp_model.pkl')
+model_draw = joblib.load('models/is_draw_mlp_model.pkl')
 
 # ─────────────────────────────────────────────
 # JEU TKINTER

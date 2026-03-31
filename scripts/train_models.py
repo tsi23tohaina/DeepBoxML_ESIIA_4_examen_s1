@@ -17,7 +17,7 @@ X_train, X_test, y_train_xwins, y_test_xwins = train_test_split(features, x_wins
 _, _, y_train_draw, y_test_draw = train_test_split(features, is_draw_target, test_size=0.2, random_state=42)
 
 # Modèle pour x_wins
-model_xwins = LogisticRegression(max_iter=1000)
+model_xwins = LogisticRegression(max_iter=10000)
 model_xwins.fit(X_train, y_train_xwins)
 
 # Prédictions et évaluation
