@@ -19,7 +19,12 @@ La mission consiste à mettre en place un pipeline complet de Machine Learning, 
 Enfin, le projet inclut le développement d’une interface jouable, offrant une expérience utilisateur fluide, où l’utilisateur peut affronter l’IA en temps réel. L’ensemble vise à démontrer l’application concrète des techniques de Machine Learning dans un contexte ludique, tout en mettant en avant des compétences en conception de systèmes intelligents, en traitement de données, et en développement logiciel.
 
 ## Structure du repository
-
+Le projet est organisé en plusieurs dossiers, chacun ayant un rôle bien défini dans le pipeline global :<br>
+├── frontend/ # Interface utilisateur (jeu interactif)<br>
+├── generateur/ # Implémentation des algorithmes (Minimax, Alpha-Beta)<br>
+├── resource/ # Données : dataset généré et analysé<br>
+├── requirements.txt # Dépendances du projet<br>
+└── README.md # Documentation du projet<br>
 ## Résultats ML
 ## Réponses aux questions
 
