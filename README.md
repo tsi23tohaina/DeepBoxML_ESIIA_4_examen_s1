@@ -19,24 +19,24 @@ La mission consiste à mettre en place un pipeline complet de Machine Learning, 
 Enfin, le projet inclut le développement d’une interface jouable, offrant une expérience utilisateur fluide, où l’utilisateur peut affronter l’IA en temps réel. L’ensemble vise à démontrer l’application concrète des techniques de Machine Learning dans un contexte ludique, tout en mettant en avant des compétences en conception de systèmes intelligents, en traitement de données, et en développement logiciel.
 
 ## Structure du repository
-Le projet est organisé en plusieurs dossiers, chacun ayant un rôle bien défini dans le pipeline global :
-├── frontend/ # Interface utilisateur (jeu interactif)
-├── generateur/ # Implémentation des algorithmes (Minimax, Alpha-Beta)
-├── resource/ # Données : dataset généré et analysé
-├── requirements.txt # Dépendances du projet
-└── README.md # Documentation du projet
+Le projet est organisé en plusieurs dossiers, chacun ayant un rôle bien défini dans le pipeline global :<br>
+├── frontend/ # Interface utilisateur (jeu interactif)<br>
+├── generateur/ # Implémentation des algorithmes (Minimax, Alpha-Beta)<br>
+├── resource/ # Données : dataset généré et analysé<br>
+├── requirements.txt # Dépendances du projet<br>
+└── README.md # Documentation du projet<br>
 
-### frontend/
+### frontend
 Contient l’interface utilisateur permettant de jouer au morpion contre l’IA.  
 Elle gère l’affichage du plateau, les interactions joueur, et la communication avec le modèle.
 
-### generateur/
+### generateur
 Regroupe les algorithmes de décision utilisés par l’IA :
 - Minimax
 - Alpha-Beta pruning  
 Ces méthodes permettent d’évaluer les positions et de choisir les meilleurs coups.
 
-### resource/
+### resource
 Contient les ressources liées aux données :
 - Dataset généré
 - Données utilisées pour l’entraînement et l’analyse
@@ -51,7 +51,7 @@ Document principal décrivant le projet, son fonctionnement et son utilisation.
 ## Résultats ML
 ## Réponses aux questions
 
-## Q1 — Analyse des coefficients
+### Q1 — Analyse des coefficients
 
 Pour les deux modèles (x_wins et is_draw), les coefficients les plus élevés en valeur absolue correspondent principalement à la case centrale, suivie des cases situées dans les coins. Les cases sur les bords ont généralement une influence plus faible.
 
@@ -62,7 +62,7 @@ Dans le modèle is_draw, les coefficients élevés traduisent des configurations
 La case centrale est particulièrement influente, car elle intervient dans le plus grand nombre de combinaisons gagnantes possibles.
 
 Ces résultats sont cohérents avec la stratégie humaine : les joueurs expérimentés privilégient le centre, puis les coins, car ces positions offrent plus d’opportunités de créer des alignements ou des doubles menaces, contrairement aux bords qui sont moins stratégiques.
-## Q2
-## Q3
-## Q4
+### Q2
+### Q3
+### Q4
 ## Liens vers la vidéo
